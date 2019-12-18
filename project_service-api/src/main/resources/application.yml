@@ -1,0 +1,25 @@
+server:
+  port: 8081
+  max-http-header-size: 100KB
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/dapeng?useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password:
+  application:
+    name: projectServer
+
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: false
+
+logging:
+  level:
+    com.dapeng.project.mapper: debug
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8080/eureka/

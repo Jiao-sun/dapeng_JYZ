@@ -1,0 +1,29 @@
+server:
+  port: 8082
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/dapeng?useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password:
+  application:
+    name: userServer
+  jta:
+    atomikos:
+      properties:
+        enable-logging:
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: false
+
+logging:
+  level:
+    com.dapeng.user.mapper: debug
+
+
+eureka:
+  client:
+    serviceUrl: #注册中心的注册地址
+      defaultZone: http://127.0.0.1:8080/eureka/

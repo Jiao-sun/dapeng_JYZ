@@ -1,0 +1,270 @@
+<!DOCTYPE html  >
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>项目管理</title>
+  <link type="text/css" href="webjars/bootstrap"
+        th:href="@{/webjars/bootstrap/3.3.7/dist/css/bootstrap.css}" rel="stylesheet">
+  <script th:src="@{/webjars/jquery/3.4.1/dist/jquery.js}"></script>
+  <script th:src="@{/webjars/bootstrap/3.3.7/dist/js/bootstrap.js}"></script>
+
+  <link rel="stylesheet" type="text/css" th:href="@{css/dailog/dailog.css}"/>
+  <link rel="stylesheet"
+        href="https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table.min.css">
+
+  <!--//成功提示框-->
+  <script th:src="@{js/dailog/zepto.js}"></script>
+  <script th:src="@{js/dailog/dailog.js}"></script>
+
+
+  <!--  //时间控件-->
+  <script th:src="@{js/moment.js}"></script>
+  <script th:src="@{js/datepicker.js}"></script>
+  <script th:src="@{js/date.js}"></script>
+  <link rel="stylesheet" th:href="@{css/datepicker.css}"/>
+  <style>
+    a {
+      cursor: pointer;
+    }
+
+    .title {
+      position: relative;
+      left: 8.3333334%;
+      width: 83.333333%;
+      height: 100px;
+      background-color: #36ffc9;
+      border-bottom: #fff80a solid 5px;
+      font-size: 18px;
+      line-height: 90px;
+    }
+
+    #date {
+      float: right;
+      position: relative;
+      right: 20px;
+    }
+
+    #info {
+      width: 95px;
+      overflow: hidden;
+      position: absolute;
+      border-radius: 5px;
+      border: 1px solid #cbcbcb;
+      background-color: #f1f1f1;
+      left: 13%;
+      top: 55px;
+      display: none;
+    }
+
+    #info li {
+      text-indent: 1em;
+      margin: 5px auto;
+    }
+
+    #title {
+      font-size: 40px;
+      text-align: center;
+
+    }
+
+    .input-group {
+      margin-top: 10px;
+    }
+
+    .input-group-addon {
+      width: 112px;
+    }
+
+    button {
+      margin: 10px;
+    }
+
+
+    #addTable td input {
+      border: none;
+      outline: none;
+      display: inline-block;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      font-size: 15px;
+      color: #333;
+      line-height: 1;
+      vertical-align: top;
+      background-color: #fff;
+      width: 100%;
+    }
+
+    .onEdit {
+      background-color: white;
+      border: 1px solid #3B9DFF;
+      cursor: text;
+      color: black;
+    }
+
+  </style>
+</head>
+<body>
+<div class="title">
+  <span>您好：</span><a th:text="${user}==null?'':${user.userName}" onclick="togelInfo()"></a>
+  <span id="date"></span>
+
+</div>
+<div id="info">
+  <ul>
+    <li><a>修改资料</a></li>
+    <li><a href="user/logout" methods="">退出登录</a></li>
+  </ul>
+</div>
+<h1 id="title">项目管理</h1>
+<div class="row ">
+  <form action="#dataTable" method="post" id="form_1">
+    <div class="col-lg-10 col-sm-10 col-xs-10 " style=" left: 8.3333334%;">
+
+      <div class="col-lg-4 col-sm-6 col-xs-12 ">
+        <div class="input-prepend input-group">
+          <span class="add-on input-group-addon">项目名称:</span>
+          <input type="text" name="pojName" class="form-control">
+        </div>
+      </div>
+      <div class="col-lg-4 col-sm-6 col-xs-12 ">
+        <div class="input-prepend input-group">
+          <span class="add-on input-group-addon">分类:</span>
+          <select class="form-control" name="category">
+            <option value="">--请选择--</option>
+            <option value="运营类型">运营类型</option>
+            <option value="销售类型">销售类型</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-lg-4 col-sm-6 col-xs-12 ">
+        <div class="input-prepend input-group">
+          <span class="add-on input-group-addon">创建人:</span>
+          <input type="text" name="createBy" class="form-control">
+        </div>
+      </div>
+      <div class="col-lg-4 col-sm-6 col-xs-12 ">
+        <div class="input-prepend input-group">
+          <span class="add-on input-group-addon">开始时间：</span>
+          <div class="c-datepicker-date-editor c-datepicker-single-editor J-datepicker-day mt10">
+            <i class="c-datepicker-range__icon kxiconfont icon-clock"></i>
+            <input type="text" autocomplete="off"
+                   placeholder="选择日期" name="startDate"
+                   class=" c-datepicker-data-input only-date" style="width: 148px">
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-sm-6 col-xs-12 ">
+        <div class="input-prepend input-group">
+          <span class="add-on input-group-addon">结束时间：</span>
+          <div class="c-datepicker-date-editor c-datepicker-single-editor J-datepicker-day mt10">
+            <i class="c-datepicker-range__icon kxiconfont icon-clock"></i>
+            <input type="text" autocomplete="off"
+                   placeholder="选择日期" name="finishDate"
+                   class=" c-datepicker-data-input only-date" style="width: 148px">
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-sm-6 col-xs-12 ">
+        <button type="submit" class="btn btn-primary ">查询</button>
+        <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#myModal">
+          添加项目
+        </button>
+      </div>
+
+    </div>
+  </form>
+</div>
+<div class="row">
+  <div class="col-sm-10 col-sm-push-1 " style="margin-left: 20px">
+
+    <table id="dataTable"></table>
+  </div>
+</div>
+
+<!--添加模态框-->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">添加项目
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-10 col-sm-push-1 ">
+
+            <table id="addTable" class="table table-bordered table-hover">
+
+              <thead class="">
+              <tr>
+                <th style="text-align: center; " data-field="pojName">
+                  <div class="th-inner sortable both">项目名称</div>
+                  <div class="fht-cell"></div>
+                </th>
+                <th style="text-align: center; " data-field="category">
+                  <div class="th-inner sortable both">项目类型</div>
+                  <div class="fht-cell"></div>
+                </th>
+                <th style="text-align: center; " data-field="createBy">
+                  <div class="th-inner sortable both">创建人</div>
+                  <div class="fht-cell"></div>
+                </th>
+                <th style="text-align: center; " data-field="startDate">
+                  <div class="th-inner sortable both">开始时间</div>
+                  <div class="fht-cell"></div>
+                </th>
+                <th style="text-align: center; " data-field="finishDate">
+                  <div class="th-inner sortable both">完成时间</div>
+                  <div class="fht-cell"></div>
+                </th>
+              </tr>
+              <tbody>
+              <form id="addForm">
+                <td><input id="pname" name="pojName"></td>
+                <td><select id="category"   name="category">
+                  <option value="">--请选择--</option>
+                  <option value="运营类型">运营类型</option>
+                  <option value="销售类型">销售类型</option>
+                </select>
+                </td>
+                <td><input id="createBy" name="createBy"></td>
+                <td>
+                  <div class="J-datepicker-day mt10">
+                    <input type="text" autocomplete="off"
+                           placeholder="选择日期" name="startDate"
+                           class=" c-datepicker-data-input only-date">
+                  </div>
+                </td>
+                <td>
+                  <div class=" J-datepicker-day mt10">
+                    <input type="text" autocomplete="off"
+                           placeholder="选择日期" name="finishDate"
+                           class=" c-datepicker-data-input only-date">
+                  </div>
+                </td>
+              </form>
+              </tbody>
+            </table>
+<div id="errorMsg" style="color: red ; font-size: 10px"></div>
+          </div>
+          <div class="modalFooter" style="float: right;clear: both">
+            <button type="button" class="btn btn-primary " onclick="add()">完成添加</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+<script th:src="@{js/ShowPage.js}" type="text/javascript"></script>
+<script th:src="@{js/bootstrapTable.js}" type="text/javascript"></script>
+<script th:src="@{js/bootstrap-table-zh-Cn.js}"></script>
+<script th:src="@{js/page/index.js}"></script>
+
+</html>

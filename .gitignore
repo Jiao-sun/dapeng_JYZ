@@ -1,0 +1,5 @@
+# Project exclude paths
+/eureka-service-8080/target/
+/page_service-8083/target/
+/project_service-api/target/
+/user_server-api/target/
