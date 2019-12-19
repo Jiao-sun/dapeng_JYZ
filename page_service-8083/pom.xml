@@ -11,7 +11,14 @@
   <artifactId>page_service-8083</artifactId>
 
   <dependencies>
+<!--
 
+    <dependency>
+      <groupId>com.dapeng.cloud</groupId>
+      <artifactId>project_servise-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+-->
 
     <dependency>
       <groupId>org.projectlombok</groupId>

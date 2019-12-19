@@ -40,4 +40,6 @@ public interface ProjectsService {
 
   List<Projects> get(Projects projects);
 
+  Projects findProjectByID(Integer pId);
+
 }

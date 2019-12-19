@@ -13,22 +13,26 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
-@FeignClient(value = "projectServer")
+@FeignClient(value = "projectServer/project")
 @Primary
 public interface ProjectClient {
 
-  @GetMapping("/project/get")
+  @GetMapping(value = "/get", consumes = "application/json")
   ResponseEntity<List<Projects>> get(@SpringQueryMap Projects project);
 
-  @PostMapping("/project/add")
+  @PostMapping("/add")
   ResponseEntity<Integer> add(@RequestBody Projects projects);
 
   @PutMapping("/update")
   public ResponseEntity<Integer> update(@SpringQueryMap Projects projects);
 
   @DeleteMapping("/delete/{pid}")
-  public ResponseEntity<Integer> delete(@PathVariable("pid") Integer pid) ;
+  public ResponseEntity<Integer> delete(@PathVariable("pid") Integer pid);
+
+  @GetMapping("/get/Pid")
+  public Projects getProject(@RequestParam("pId") Integer pId);
 
 }

@@ -19,7 +19,9 @@ public class ProjectServiceImpl implements ProjectsService {
   }
 
   public int delete(Integer pid) {
-    return projectSMapper.deleteById(pid);
+    QueryWrapper<Projects> wrapper = new QueryWrapper();
+    wrapper.eq(pid!=null&&pid!=0,"pId",pid);
+    return projectSMapper.delete(wrapper);
   }
 
   public int update(Projects projects) {
@@ -40,5 +42,14 @@ public class ProjectServiceImpl implements ProjectsService {
         .eq(projects.getStartDate() != null && !"".equals(projects.getStartDate()), "startDate",
             projects.getStartDate());
     return projectSMapper.selectList(wrapper);
+  }
+
+  @Override
+  public Projects findProjectByID(Integer pId) {
+    Projects project = null;
+    QueryWrapper<Projects> wrapper = new QueryWrapper();
+    wrapper.eq(pId!=null&&pId!=0,"pId",pId);
+    project= projectSMapper.selectOne(wrapper);
+    return project;
   }
 }

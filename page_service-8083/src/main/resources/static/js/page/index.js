@@ -8,7 +8,10 @@ var columns = [{
     sortable: "true",
     field: "pid",
     title: "项目编号",
-    align: "center"
+    align: "center",
+    formatter: function (value, row, index) {
+      return "<span class='pid'>" + value + "</span>";
+    }
   },
   {
     field: "pojName",
@@ -16,7 +19,8 @@ var columns = [{
     align: "center",
     formatter: function (value, row, index) {
       return "<a onclick=\"edit(" + row["pid"]
-          + ",this)\"><span class='itemEdit'>" + value + "</span></a>"
+          + ",this)\"><span class='pname'>" + value + "</span></a>";
+
     }
   },
   {
@@ -24,7 +28,7 @@ var columns = [{
     title: "项目类型",
     align: "center",
     formatter: function (value, row, index) {
-      return "<span class='itemEdit'>" + value + "</span>"
+      return "<span class='category'>" + value + "</span>";
     }
   },
   {
@@ -32,7 +36,7 @@ var columns = [{
     title: "创建人",
     align: "center",
     formatter: function (value, row, index) {
-      return "<span class='itemEdit'>" + value + "</span>"
+      return "<span class='createBy'>" + value + "</span>";
     }
   },
   {
@@ -43,7 +47,7 @@ var columns = [{
     formatter: function (value, row, index) {
       if (row["startDate"] != null) {
         var date = new Date(row["startDate"]);
-        return "<span class='itemEdit'>" + date.getFullYear() + "-"
+        return "<span class='startDate'>" + date.getFullYear() + "-"
             + eval(date.getMonth() + "+1") + "-" + date.getDate() + "</span>";
       }
 
@@ -57,10 +61,9 @@ var columns = [{
     formatter: function (value, row, index) {
       if (row["finishDate"] != null) {
         var date = new Date(row["finishDate"]);
-        return "<span class='itemEdit'>" + date.getFullYear() + "-"
-            + date.getMonth() + "-" + date.getDate() + "</span>";
+        return "<span class='finishDate'>" + date.getFullYear() + "-"
+            + eval(date.getMonth() + "+1") + "-" + date.getDate() + "</span>";
       }
-
     }
   },
   {
@@ -68,9 +71,8 @@ var columns = [{
     type: 'text',
     align: "center",
     formatter: function (value, row, index) {
-
       return "<span><a onclick=\"edit(" + row["pid"]
-          + ",this)\" class='editLink'>编辑</a> | <a onclick=\"delete("
+          + ",this)\" class='editLink'>编辑</a> | <a onclick=\"delet("
           + row["pid"] + ",this)\">删除</a></span>"
     }
   }
@@ -90,7 +92,7 @@ $("#dataTable").bootstrapTable({
   locale: "zh-CN",
   striped: true,
   method: "get",
-  paginationDetailHAlign: "right",
+  /*paginationDetailHAlign: "right",*/
   maintainSelected: "true"
   // clickToSelect: "false"
 });
@@ -104,12 +106,65 @@ $("form").submit(function () {
 
 /*编辑*/
 function edit(pid, elem) {
-  $('.editLink').text("完成")
-  $('.editLink').attr("onclick", "EiditOk(" + pid + ")")
-  $(elem).parents("tr").find(".itemEdit").attr("contenteditable", "true")
-  $(elem).parents("tr").find(".itemEdit").addClass("onEdit")
+  var tr = $(elem).parents("tr");
 
+  $("#myModal .modal-dialog").css("margin", "20% auto");
+  $("#myModal .modal-title div").text("修改项目");
+  $("#addForm").attr("id", "editForm");
+  $(".modalFooter button").attr("onclick",
+      "editOk(" + tr.find('.pid').text() + ")")
+  $(".modalFooter button").text("完成编辑")
+  $("#pname").val(tr.find(".pname").text());
+  var category = tr.find(".category").text()
+  $.each($("#category option"), function (index, item) {
+    if ($(item).val() == category) {
+      $(item).attr("selected", "selected")
+    }
+  })
+  $("#createBy").val(tr.find(".createBy").text())
+  $("#editForm input[name='startDate']").val(tr.find(".startDate").text())
+  $("#editForm input[name='finishDate']").val(tr.find(".finishDate").text())
+  $('#myModal').modal("show");
 }
+
+function editOk(pid) {
+  var data = {
+    pId: pid,
+    pojName: $("#pname").val(),
+    category: $("#category").val(),
+    createBy: $("#createBy").val(),
+    startDate: $("#editForm input[name='startDate']").val(),
+    finishDate: $("#editForm input[name='finishDate']").val()
+  };
+  $.ajax({
+    url: "/project/update",
+    type: "PUT",
+    data: data,
+    success: function (data) {
+alert(data)
+      if(data==0){
+        popup({
+          type: 'tip',
+          msg: "没有做任何修改！",
+          delay: 2000
+        });
+      }
+    },
+    error: function (data) {
+
+    }
+  })
+}
+
+//模态框恢复
+$('#myModal').on("hidden.bs.modal", function () {
+  $("#myModal .modal-dialog").css("margin");
+  $("#myModal .modal-title div").text("添加项目");
+  $("#editForm").attr("id", "addForm");
+  $(".modalFooter button").attr("onclick", "add()")
+  $(".modalFooter button").text("完成添加")
+
+});
 
 /**显示时间 */
 function setData() {
@@ -183,8 +238,7 @@ function add() {
       data: data,
       success: function (data) {
         if (data == 1) {
-          $('#myModal').hide();
-          $('.modal-backdrop').remove();
+          $('#myModal').modal("hide");
           popup({
             type: 'success',
             msg: "添加成功！",
@@ -198,6 +252,26 @@ function add() {
     })
 
   }
-
   return false;
+}
+
+function delet(pid, elem) {
+  if (confirm("确认删除编号为《" + pid + "》的任务")) {
+    $.ajax({
+      url: "/project/delete/" + pid,
+      type: "DELETE",
+      success: function (data) {
+        if (data == 1) {
+          popup({
+            type: 'success',
+            msg: "删除成功！",
+            delay: 1000,
+            callBack: function () {
+              $('#dataTable').bootstrapTable('refresh');
+            }
+          });
+        }
+      }
+    })
+  }
 }

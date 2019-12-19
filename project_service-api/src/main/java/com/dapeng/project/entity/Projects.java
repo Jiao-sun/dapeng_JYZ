@@ -1,5 +1,7 @@
 package com.dapeng.project.entity;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +12,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Projects  {
+public class Projects {
 
   private Integer pId;
   @NonNull
@@ -20,12 +22,40 @@ public class Projects  {
   @NonNull
   private String createBy;
 
-/*  @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")//传出输出值
-  @DateTimeFormat(pattern ="yyyy-MM-dd")//传入构建类格式化*/
+  /* @DateTimeFormat(pattern ="yyyy-MM-dd")//传入构建类格式化
+    @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")//传出输出值*/
   private String startDate;
 
-/*  @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")//传出输出值
-  @DateTimeFormat(pattern ="yyyy-MM-dd")*/
+  /*
+    @DateTimeFormat(pattern ="yyyy-MM-dd")
+    @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")//传出输出值*/
   private String finishDate;
 
+
+  public void setStartDate(String startDate) {
+    if (startDate.split("-").length == 3) {
+      this.startDate = startDate;
+    } else if (startDate != null && !"".equals(startDate)) {
+      Date date = new Date(startDate);
+      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+      this.startDate = sdf.format(date);
+    } else {
+      this.startDate = null;
+    }
+
+
+  }
+
+  public void setFinishDate(String finishDate) {
+    if (finishDate.split("-").length == 3) {
+      this.finishDate = finishDate;
+    } else if (finishDate == null || "".equals(finishDate)) {
+      this.finishDate = null;
+    } else {
+      Date date = new Date(finishDate);
+      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+      this.finishDate = sdf.format(date);
+    }
+
+  }
 }

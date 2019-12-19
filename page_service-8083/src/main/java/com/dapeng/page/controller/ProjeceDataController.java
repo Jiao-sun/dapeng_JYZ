@@ -4,16 +4,15 @@ import com.dapeng.page.client.ProjectClient;
 import com.dapeng.page.entity.Projects;
 import java.util.List;
 import javax.annotation.Resource;
-import javax.websocket.server.PathParam;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 @RequestMapping("/project")
 public class ProjeceDataController {
 
@@ -26,18 +25,23 @@ public class ProjeceDataController {
   }
 
   @PostMapping("/add")
-  public ResponseEntity<Integer> add( Projects projects) {
+  public ResponseEntity<Integer> add(Projects projects) {
     return projectClient.add(projects);
   }
 
   @DeleteMapping("/delete/{pid}")
-  public ResponseEntity<Integer> get(@PathParam("pid") Integer pid) {
+  public ResponseEntity<Integer> delete(@PathVariable("pid") Integer pid) {
     return projectClient.delete(pid);
   }
 
-  @PutMapping("/update")
+ @RequestMapping("/update")
   public ResponseEntity<Integer> update(Projects projects) {
+    Projects p = projectClient.getProject(projects.getPId());
+    if (projects.toString().equals(p.toString())) {
+      return ResponseEntity.ok(0);
+    }
     return projectClient.update(projects);
+
   }
 
 }

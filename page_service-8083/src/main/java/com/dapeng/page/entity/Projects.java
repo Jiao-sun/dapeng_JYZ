@@ -7,16 +7,19 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Data
 public class Projects {
+
   private Integer pId;
   private String pojName;
   private String category;
   private String createBy;
 
-   @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")//传出输出值
-    @DateTimeFormat(pattern ="yyyy-MM-dd")//传入构建类格式化
+
+  @DateTimeFormat(pattern = "yyyy-MM-dd")//传入构建类格式化
+ @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")//传出输出值
   private Date startDate;
 
-   @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")//传出输出值
-    @DateTimeFormat(pattern ="yyyy-MM-dd")
+
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
+ @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")//传出输出值
   private Date finishDate;
 }

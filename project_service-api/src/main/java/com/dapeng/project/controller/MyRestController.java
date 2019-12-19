@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -24,13 +25,13 @@ public class MyRestController {
   ProjectsService projectsService;
 
   @GetMapping("/get")
-  public ResponseEntity<List<Projects>> get( Projects projects) {
+  public ResponseEntity<List<Projects>> get(Projects projects) {
     return ResponseEntity.ok(projectsService.get(projects));
   }
 
   @PostMapping("/add")
   public ResponseEntity<Integer> add(@RequestBody Projects projects) {
-    return ResponseEntity.ok(projectsService.add(  projects));
+    return ResponseEntity.ok(projectsService.add(projects));
   }
 
   @PutMapping("/update")
@@ -41,5 +42,10 @@ public class MyRestController {
   @DeleteMapping("/delete/{pid}")
   public ResponseEntity<Integer> update(@PathVariable("pid") Integer pid) {
     return ResponseEntity.ok(projectsService.delete(pid));
+  }
+
+  @GetMapping("/get/Pid")
+  public Projects getProject(@RequestParam("pId")Integer pId) {
+    return projectsService.findProjectByID(pId);
   }
 }

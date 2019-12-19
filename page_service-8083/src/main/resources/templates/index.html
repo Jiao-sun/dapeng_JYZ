@@ -184,11 +184,12 @@
 </div>
 
 <!--添加模态框-->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" data-backdrop="static">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">添加项目
+        <h4 class="modal-title">
+          <div style="display: inline-block">添加项目</div>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -197,60 +198,63 @@
       <div class="modal-body">
         <div class="row">
           <div class="col-sm-10 col-sm-push-1 ">
+            <form id="addForm">
+              <table id="addTable" class="table table-bordered table-hover">
+                <thead c>
+                <tr>
+                  <th style="text-align: center; " data-field="pojName">
+                    <div class="th-inner sortable both">项目名称</div>
+                    <div class="fht-cell"></div>
+                  </th>
+                  <th style="text-align: center; " data-field="category">
+                    <div class="th-inner sortable both">项目类型</div>
+                    <div class="fht-cell"></div>
+                  </th>
+                  <th style="text-align: center; " data-field="createBy">
+                    <div class="th-inner sortable both">创建人</div>
+                    <div class="fht-cell"></div>
+                  </th>
+                  <th style="text-align: center; " data-field="startDate">
+                    <div class="th-inner sortable both">开始时间</div>
+                    <div class="fht-cell"></div>
+                  </th>
+                  <th style="text-align: center; " data-field="finishDate">
+                    <div class="th-inner sortable both">完成时间</div>
+                    <div class="fht-cell"></div>
+                  </th>
+                </tr>
+                </thead>
+                <tbody>
 
-            <table id="addTable" class="table table-bordered table-hover">
+                <tr>
+                  <td><input id="pname" name="pojName"></td>
+                  <td><select id="category" name="category">
+                    <option value="">--请选择--</option>
+                    <option value="运营类型">运营类型</option>
+                    <option value="销售类型">销售类型</option>
+                  </select>
+                  </td>
+                  <td><input id="createBy" name="createBy"></td>
+                  <td>
+                    <div class="J-datepicker-day mt10">
+                      <input type="text" autocomplete="off"
+                             placeholder="选择日期" name="startDate"
+                             class=" c-datepicker-data-input only-date">
+                    </div>
+                  </td>
+                  <td>
+                    <div class=" J-datepicker-day mt10">
+                      <input type="text" autocomplete="off"
+                             placeholder="选择日期" name="finishDate"
+                             class=" c-datepicker-data-input only-date">
+                    </div>
+                  </td>
+                </tr>
 
-              <thead class="">
-              <tr>
-                <th style="text-align: center; " data-field="pojName">
-                  <div class="th-inner sortable both">项目名称</div>
-                  <div class="fht-cell"></div>
-                </th>
-                <th style="text-align: center; " data-field="category">
-                  <div class="th-inner sortable both">项目类型</div>
-                  <div class="fht-cell"></div>
-                </th>
-                <th style="text-align: center; " data-field="createBy">
-                  <div class="th-inner sortable both">创建人</div>
-                  <div class="fht-cell"></div>
-                </th>
-                <th style="text-align: center; " data-field="startDate">
-                  <div class="th-inner sortable both">开始时间</div>
-                  <div class="fht-cell"></div>
-                </th>
-                <th style="text-align: center; " data-field="finishDate">
-                  <div class="th-inner sortable both">完成时间</div>
-                  <div class="fht-cell"></div>
-                </th>
-              </tr>
-              <tbody>
-              <form id="addForm">
-                <td><input id="pname" name="pojName"></td>
-                <td><select id="category"   name="category">
-                  <option value="">--请选择--</option>
-                  <option value="运营类型">运营类型</option>
-                  <option value="销售类型">销售类型</option>
-                </select>
-                </td>
-                <td><input id="createBy" name="createBy"></td>
-                <td>
-                  <div class="J-datepicker-day mt10">
-                    <input type="text" autocomplete="off"
-                           placeholder="选择日期" name="startDate"
-                           class=" c-datepicker-data-input only-date">
-                  </div>
-                </td>
-                <td>
-                  <div class=" J-datepicker-day mt10">
-                    <input type="text" autocomplete="off"
-                           placeholder="选择日期" name="finishDate"
-                           class=" c-datepicker-data-input only-date">
-                  </div>
-                </td>
-              </form>
-              </tbody>
-            </table>
-<div id="errorMsg" style="color: red ; font-size: 10px"></div>
+                </tbody>
+              </table>
+            </form>
+            <div id="errorMsg" style="color: red ; font-size: 10px"></div>
           </div>
           <div class="modalFooter" style="float: right;clear: both">
             <button type="button" class="btn btn-primary " onclick="add()">完成添加</button>
@@ -260,7 +264,6 @@
     </div>
   </div>
 </div>
-
 </body>
 <script th:src="@{js/ShowPage.js}" type="text/javascript"></script>
 <script th:src="@{js/bootstrapTable.js}" type="text/javascript"></script>
