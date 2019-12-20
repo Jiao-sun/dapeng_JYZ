@@ -19,77 +19,31 @@ public class RedisUtil {
   @Autowired
   private RedisTemplate<String, String> redisTemplate;
 
+
+  /*设置登录*/
   public boolean setLoger(String sessionId, User user) {
     boolean reault = false;
     String jsonStr = JSON.toJSONString(user);
-    try {
-      redisTemplate.opsForValue().set(sessionId, jsonStr, 30, TimeUnit.MINUTES);
-      reault = true;
-    } catch (Exception e) {
-    }
+    redisTemplate.opsForValue().set(sessionId, jsonStr, 30, TimeUnit.MINUTES);
+    reault = true;
     return reault;
   }
 
+  /*获取登录*/
   public User getLoger(String sessionId) {
     User user = null;
-    try {
-      String maprStr = redisTemplate.opsForValue().get(sessionId);
-      user = JSON.parseObject(maprStr, User.class);
-    } catch (Exception e) {
-
-    }
+    String maprStr = redisTemplate.opsForValue().get(sessionId);
+    user = JSON.parseObject(maprStr, User.class);
     return user;
   }
 
-  public boolean hasUser(String key){
-    return  redisTemplate.hasKey(key);
+  /*判断登录*/
+  public boolean hasUser(String key) {
+    return redisTemplate.hasKey(key);
   }
 
-
-
-  /**
-   * 读取缓存
-   *
-   * @param key
-   * @return
-   */
-  public String get(final String key) {
-    return redisTemplate.opsForValue().get(key);
-  }
-
-  public boolean setObj(final String key, Object obj) {
-    boolean result = false;
-    String jsonString = JSON.toJSONString(obj);
-    result = set(key, jsonString);
-    return result;
-  }
-
-  /**
-   * 写入缓存
-   */
-  public boolean set(final String key, String value) {
-    boolean result = false;
-    try {
-      redisTemplate.opsForValue().set(key, value, 30, TimeUnit.MINUTES);
-      result = true;
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    return result;
-  }
-
-  /**
-   * 更新缓存
-   */
-  public boolean getAndSet(final String key, String value) {
-    boolean result = false;
-    try {
-      redisTemplate.opsForValue().getAndSet(key, value);
-      result = true;
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    return result;
+  public void flushLoger(String sessionId) {
+    redisTemplate.expire(sessionId, 30, TimeUnit.MINUTES);
   }
 
   /**
@@ -97,13 +51,7 @@ public class RedisUtil {
    */
   public boolean delete(final String key) {
     boolean result = false;
-    try {
-      redisTemplate.delete(key);
-      result = true;
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+    result = redisTemplate.delete(key);
     return result;
   }
-
 }

@@ -1,5 +1,7 @@
 package com.dapeng.project.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import lombok.AllArgsConstructor;
@@ -14,7 +16,8 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 public class Projects {
 
-  private Integer pId;
+  @TableId(value = "pId",type = IdType.INPUT)
+  private Long pId;
   @NonNull
   private String pojName;
   @NonNull

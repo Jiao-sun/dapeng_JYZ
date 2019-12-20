@@ -34,7 +34,7 @@ public class Md5Util {
       // >>>:无符号右移
       // &:按位与
       //0xf:0-15的数字
-      chs[k++] = ch[b3 >>> 4 & 0xf];
+      chs[k++] = ch[b3 >>> 3 & 0xf];
       chs[k++] = ch[b3 & 0xf];
     }
 

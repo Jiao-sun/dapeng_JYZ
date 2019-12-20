@@ -1,7 +1,8 @@
-package com.dapeng.page.exceptionHandler;
+package com.dapeng.page.utils;
 
 import com.dapeng.page.entity.ExciptionEmu;
 import com.dapeng.page.entity.ResultBody;
+import com.dapeng.page.exceptionHandler.PageException;
 import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,10 +22,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
    * @param e
    * @return
    */
-  @ExceptionHandler(value = PageException.class)
+  @ExceptionHandler(PageException.class)
   public ResultBody bizExceptionHandler(HttpServletRequest req, PageException e) {
-    logger.error("发生业务异常！原因是：{}", e.getExptMsg());
-    return ResultBody.error(e.getExptCode(), e.getExptMsg());
+    logger.error("发生业务异常！原因是：{}", e.getExptMsg());//控制台日志输出
+    return ResultBody.error(e.getExptCode(), e.getExptMsg());//返回错误信息
   }
 
   /**

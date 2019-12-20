@@ -75,7 +75,6 @@ public class UserDataController {
     }
   }
 
-
   @PostMapping("/user/logout")
   public boolean logout(HttpSession session) {
     redisUtil.delete(session.getId());
@@ -83,7 +82,7 @@ public class UserDataController {
   }
 
   @PostMapping("/user/login")
-  public String login(String userNo, String password, HttpSession session, Model model) {
+  public String login(String userNo, String password, HttpSession session, Model model)                                           {
     User user = userClient.GetByNo(userNo).getBody();
 
     if (user == null) {
@@ -91,14 +90,15 @@ public class UserDataController {
     }
     String md5PWD;
     try {
-      md5PWD=Md5Util.md5(user.getPassword());
+      md5PWD=Md5Util.md5(password);
     }catch (Exception e){
       return "Error";
     }
 
-    if (!password.equals(md5PWD)) {
+    if (!user.getPassword().equals(md5PWD)) {
       return "passwordError";
     }else{
+      model.addAttribute("user",user);
       redisUtil.setLoger(session.getId(), user);
       return "ok";
     }

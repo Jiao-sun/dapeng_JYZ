@@ -15,12 +15,15 @@ public class ProjectServiceImpl implements ProjectsService {
   private ProjectSMapper projectSMapper;
 
   public int add(Projects project) {
+    QueryWrapper<Projects> wrapper = new QueryWrapper();
+
+
     return projectSMapper.insert(project);
   }
 
   public int delete(Integer pid) {
     QueryWrapper<Projects> wrapper = new QueryWrapper();
-    wrapper.eq(pid!=null&&pid!=0,"pId",pid);
+    wrapper.eq(pid != null && pid != 0, "pId", pid);
     return projectSMapper.delete(wrapper);
   }
 
@@ -48,8 +51,8 @@ public class ProjectServiceImpl implements ProjectsService {
   public Projects findProjectByID(Integer pId) {
     Projects project = null;
     QueryWrapper<Projects> wrapper = new QueryWrapper();
-    wrapper.eq(pId!=null&&pId!=0,"pId",pId);
-    project= projectSMapper.selectOne(wrapper);
+    wrapper.eq(pId != null && pId != 0, "pId", pId);
+    project = projectSMapper.selectOne(wrapper);
     return project;
   }
 }

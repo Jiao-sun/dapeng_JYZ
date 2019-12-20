@@ -44,15 +44,10 @@ public class ViewController {
       model.addAttribute("user",redisUtil.getLoger(session.getId()));
       return "/index";
     } else {
-      return "/login";
+      return "redirect:/login";
     }
   }
 
-  @GetMapping("/index.html")
-  public String aindex() {
-
-    return "index";
-  }
 
   /**
    * @return

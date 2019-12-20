@@ -2,19 +2,22 @@ package com.dapeng.page.config;
 
 import com.dapeng.page.utils.LoginInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+@Configuration
 public class WebConfig implements WebMvcConfigurer {
 
   @Autowired
   LoginInterceptor loginInterceptor;
 
-  final String[] notLoginInterceptPaths = {"/static/**", "/admin/login", "/error/**", "/login"};
+  final String[] notLoginInterceptPaths = {"/static/**", "/user/login", "/error/**", "js/", "/login"};
 
+  //注册扩展拦截器
   public void addInterceptors(InterceptorRegistry registry) {
     registry.addInterceptor(loginInterceptor).addPathPatterns("/**")
         .excludePathPatterns(notLoginInterceptPaths);
@@ -27,7 +30,9 @@ public class WebConfig implements WebMvcConfigurer {
    */
   public void addResourceHandlers(ResourceHandlerRegistry registry) {
     //排除静态资源拦截
-    registry.addResourceHandler("classpath:/static/**").addResourceLocations("classpath:/static/");
+    registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+    registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
+
   }
 
   /**
@@ -35,6 +40,7 @@ public class WebConfig implements WebMvcConfigurer {
    */
   public void addViewControllers(ViewControllerRegistry registry) {
     registry.addViewController("/login").setViewName("login");
+    registry.addViewController("/main").setViewName("index");
   }
 
   public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
