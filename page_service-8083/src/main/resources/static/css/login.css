@@ -20,6 +20,7 @@
   width: 100%;
   position: relative;
   background-image: url("../img/backgrond.jpg");
+  background-size: cover;
 }
 
 .errorMsg {

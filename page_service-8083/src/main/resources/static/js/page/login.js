@@ -89,8 +89,8 @@ $("#loginForm").submit(function () {
     $("#passwordError").text("")
     $.post({
       url: "user/login",
-      data: $("#loginForm").serialize(),
-      success: function (msg) {
+      data: $("#loginForm").serialize()
+    /*  success: function (msg) {
         switch (msg) {
           case "userNoError":
             $("#userNoError").text("账号有误或不存在")
@@ -106,7 +106,7 @@ $("#loginForm").submit(function () {
             });
             break;
         }
-      }
+      }*/
     })
   }
   return false
