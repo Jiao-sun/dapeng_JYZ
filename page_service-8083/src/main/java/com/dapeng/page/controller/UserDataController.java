@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,6 +33,29 @@ public class UserDataController {
 
   }
 
+  @PostMapping("/user/login")
+  public String login(String userNo, String password, HttpSession session, Model model) {
+    User user = userClient.GetByNo(userNo).getBody();
+    if (user == null) {
+      return "userNoError";
+    }
+    String md5PWD;
+    try {
+      md5PWD = Md5Util.md5(password);
+    } catch (Exception e) {
+      return "Error";
+    }
+
+    if (!user.getPassword().equals(md5PWD)) {
+      return "passwordError";
+    } else {
+      session.setAttribute("user", user);
+      redisUtil.setLoger(session.getId(), user);
+      return "ok";
+    }
+
+  }
+
   @PostMapping("/user/add")
   public Map add(User user) {
     Map resultMap = new HashMap();
@@ -45,14 +69,14 @@ public class UserDataController {
         Long time = new Date().getTime();
         if (time - ftime <= 30000) {
           String timestr = time.toString();
-          for(;timestr.length()>1;){
-            char c=(char)Integer.parseInt(timestr.substring(0,2));
-            if(c>'0'&&c<'9'||c>'a'&&c<'z'||c>'A'&&c<'Z'){
+          for (; timestr.length() > 1; ) {
+            char c = (char) Integer.parseInt(timestr.substring(0, 2));
+            if (c > '0' && c < '9' || c > 'a' && c < 'z' || c > 'A' && c < 'Z') {
               buffer.append(c);
-            }else{
+            } else {
 
             }
-            timestr=timestr.substring(2);
+            timestr = timestr.substring(2);
           }
           buffer.append(timestr);
           if (userClient.GetByNo(buffer.toString()).getBody() == null) {
@@ -69,10 +93,23 @@ public class UserDataController {
     } catch (NoSuchAlgorithmException e) {
       e.printStackTrace();
     } finally {
-      resultMap.put("status",resultStatus);
-      resultMap.put("userNo",user.getUserNo());
+      resultMap.put("status", resultStatus);
+      resultMap.put("userNo", user.getUserNo());
       return resultMap;
     }
+  }
+
+  @PutMapping("/user/updata")
+  public ResponseEntity updataUserInfo(User user) {
+    return userClient.update(user);
+  }
+
+  @GetMapping("/user/validata")
+  public ResponseEntity validata(String userNo, String PWD, HttpSession session)
+      throws NoSuchAlgorithmException {
+    User user = (User) session.getAttribute("user");
+    boolean flag = user.getPassword().equals(Md5Util.md5(PWD));
+    return ResponseEntity.ok(flag);
   }
 
   @PostMapping("/user/logout")
@@ -81,28 +118,6 @@ public class UserDataController {
     return true;
   }
 
-  @PostMapping("/user/login")
-  public String login(String userNo, String password, HttpSession session, Model model)                                           {
-    User user = userClient.GetByNo(userNo).getBody();
 
-    if (user == null) {
-      return "userNoError";
-    }
-    String md5PWD;
-    try {
-      md5PWD=Md5Util.md5(password);
-    }catch (Exception e){
-      return "Error";
-    }
-
-    if (!user.getPassword().equals(md5PWD)) {
-      return "passwordError";
-    }else{
-      model.addAttribute("user",user);
-      redisUtil.setLoger(session.getId(), user);
-      return "ok";
-    }
-
-  }
 }
 

@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <title>项目管理</title>
-  <link type="text/css" href="webjars/bootstrap"
-        th:href="@{static/webjars/bootstrap/3.3.7/dist/css/bootstrap.css}" rel="stylesheet">
-  <script th:src="@{static/webjars/jquery/3.4.1/dist/jquery.js}"></script>
-  <script th:src="@{static/webjars/bootstrap/3.3.7/dist/js/bootstrap.js}"></script>
+  <link type="text/css" href="/webjars/bootstrap"
+        th:href="@{/webjars/bootstrap/3.3.7/dist/css/bootstrap.css}" rel="stylesheet">
+  <script th:src="@{/webjars/jquery/3.4.1/dist/jquery.js}"></script>
+  <script th:src="@{/webjars/bootstrap/3.3.7/dist/js/bootstrap.js}"></script>
 
   <link rel="stylesheet" type="text/css" th:href="@{static/css/dailog/dailog.css}"/>
   <link rel="stylesheet"
@@ -107,13 +107,13 @@
 </head>
 <body>
 <div class="title">
-  <span>您好：</span><a th:text="${user}==null?'':${user.userName}" onclick="togelInfo()"></a>
+  <span>您好：</span><a th:text="${session.user}==null?'':${session.user.userName}" onclick="togelInfo()"></a>
   <span id="date"></span>
 
 </div>
 <div id="info">
   <ul>
-    <li><a href="/user/info">修改资料</a></li>
+    <li><a href="/user/info/">修改资料</a></li>
     <li><a onclick="logout()">退出登录</a></li>
   </ul>
 </div>

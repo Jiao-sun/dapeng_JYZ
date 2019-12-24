@@ -4,13 +4,13 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   <title>登录</title>
-  <link rel="stylesheet" type="text/css" th:href="@{static/css/login.css}"/>
-  <link rel="stylesheet" type="text/css" th:href="@{static/css/dailog/dailog.css}"/>
+  <link rel="stylesheet" type="text/css" href="/static/css/login.css"/>
+  <link rel="stylesheet" type="text/css" href="/static/css/dailog/dailog.css"/>
 
 </head>
-<script th:src="@{static/webjars/jquery/3.4.1/dist/jquery.js}"></script>
-<script th:src="@{static/js/dailog/zepto.js}"></script>
-<script th:src="@{static/js/dailog/dailog.js}"></script>
+<script th:src="@{/webjars/jquery/3.4.1/dist/jquery.js}"></script>
+<script src="/static/js/dailog/zepto.js"></script>
+<script src="/static/js/dailog/dailog.js"></script>
 <body style="overflow:scroll;overflow-y:hidden">
 <!-- 登录body -->
 <div class="logDiv">
@@ -22,14 +22,14 @@
     <!-- 输入框 -->
     <form id="loginForm">
       <div class="lgD">
-        <img class="img1" th:src="@{static/img/logName.png}"/>
+        <img class="img1" src="/static/img/logName.png"/>
         <input type="text" placeholder="输入用户账号" name="userNo"/>
-        <span class="errorMsg" id="userNoError"></span>
+        <span class="errorMsg" id="userNoError" ></span>
       </div>
       <div class="lgD">
-        <img class="img1" th:src="@{static/img/logPwd.png}"/>
+        <img class="img1" src="/static/img/logPwd.png"/>
         <input type="password" placeholder="输入用户密码" name="password"/>
-        <span class="errorMsg" id="passwordError"></span>
+        <span class="errorMsg" id="passwordError" ></span>
       </div>
       <div class="logB">
         <span>
@@ -58,25 +58,24 @@
     <!-- 输入框 -->
     <form id="regForm" action="/user/add" method="post">
       <div class="regD">
-        <img class="img1" th:src="@{static/img/user.png}"/>
+        <img class="img1" src="/static/img/user.png"/>
         <input type="text" id="regUserName" placeholder="输入用户名" name="userName"/>
-        <span id="regNameError" class="errorMsg"></span>
+        <span id="regNameError" class="errorMsg" ></span>
       </div>
       <div class="regD">
-        <img class="img1" th:src="@{static/img/password.png}"/>
+        <img class="img1" src="/static/img/password.png"/>
         <input id="regPWD" type="password" placeholder="输入用户密码" name="password"/>
-        <span id="regPWDError" class="errorMsg"></span>
+        <span id="regPWDError" class="errorMsg" ></span>
       </div>
       <div class="regD">
-        <img class="img1" th:src="@{static/img/ico-sex.png}"/>
+        <img class="img1" src="/static/img/ico-sex.png"/>
         <div class="sexinput">
           <input type="radio" name="sex" value="男" checked>男
           <input type="radio" name="sex" value="女">女
-          </divclass>
         </div>
       </div>
       <div class="regD">
-        <img class="img1" th:src="@{static/img/phone.png}"/>
+        <img class="img1" src="/static/img/phone.png"/>
         <input id="regTEL" type="tel" placeholder="电话" name="tel"/>
         <span id="regTELError" class="errorMsg"></span>
       </div>
@@ -87,7 +86,7 @@
   </div>
 </div>
 
-<script th:src="@{static/js/page/login.js}"></script>
+<script src="/static/js/page/login.js"></script>
 
 </body>
 </html>

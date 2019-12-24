@@ -20,7 +20,29 @@ public class LoginInterceptor implements HandlerInterceptor {
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
       throws Exception {
-    logger.info("进入LoginInterceptor拦截器==============");
+    String url = request.getRequestURI();
+    User user = (User) request.getSession().getAttribute("user");
+    String sessionId = request.getSession().getId();
+    logger.info("访问:" + url);
+    if (redisUtil.hasUser(sessionId)) {
+      if (redisUtil.getLoger(sessionId).toString().equals(user.toString())) {
+        logger.info("已登录  信息正确，放行======");
+        redisUtil.flushLoger(sessionId);
+        return true;
+      } else {
+
+        logger.error("已登录  但信息不符，放行======");
+        return false;
+      }
+
+    } else {
+      logger.error("未登录 重定向到登录------");
+      response.sendRedirect("/login");
+      return false;
+    }
+
+
+    /*logger.info("进入LoginInterceptor拦截器==============");
     String basePath = request.getContextPath();
     String path = request.getRequestURI();
     String sessionId = request.getSession().getId();
@@ -40,7 +62,7 @@ public class LoginInterceptor implements HandlerInterceptor {
     response.setHeader("Content-Type", "text/html;charset=UTF-8");
     response.sendRedirect(request.getContextPath() + "/login");
     return false;
-
+*/
 
   }
 

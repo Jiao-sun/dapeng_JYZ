@@ -48,7 +48,11 @@ var columns = [{
       if (row["startDate"] != null) {
         var date = new Date(row["startDate"]);
         return "<span class='startDate'>" + date.getFullYear() + "-"
-            + eval(date.getMonth() + "+1") + "-" + date.getDate() + "</span>";
+            + ((eval(date.getMonth() + "+1") < 10) ? ('0' + eval(
+                date.getMonth() + "+1")) : (eval(date.getMonth() + "+1"))) + "-"
+            + ((date.getDate() < 10) ? ('0' + date.getDate())
+                : (date.getDate()))
+            + "</span>";
       }
 
     }
@@ -62,7 +66,11 @@ var columns = [{
       if (row["finishDate"] != null) {
         var date = new Date(row["finishDate"]);
         return "<span class='finishDate'>" + date.getFullYear() + "-"
-            + eval(date.getMonth() + "+1") + "-" + date.getDate() + "</span>";
+            + ((eval(date.getMonth() + "+1") < 10) ? ('0' + eval(
+                date.getMonth() + "+1")) : (eval(date.getMonth() + "+1"))) + "-"
+            + ((date.getDate() < 10) ? ('0' + date.getDate())
+                : (date.getDate()))
+            + "</span>";
       }
     }
   },
@@ -100,6 +108,7 @@ $("form").submit(function () {
   $('#dataTable').bootstrapTable('refresh', {url: "/project/get?" + subData});
   return false;
 });
+
 /*修改编辑项目*/
 function edit(pid, elem) {
   var tr = $(elem).parents("tr");
@@ -187,7 +196,11 @@ function setData() {
   var date = new Date();
   var str = "现在是: " + date.getFullYear() + "年" + eval(date.getMonth() + "+1")
       + "月" + date.getDate() + "日 "
-      + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+      + ((date.getHours() < 10) ? ('0' + date.getHours()) : (date.getHours())) +
+      ":" + ((date.getMinutes() < 10) ? ('0' + date.getMinutes())
+          : (date.getMinutes())) +
+      ":" + ((date.getSeconds() < 10) ? ('0' + date.getSeconds())
+          : (date.getSeconds()));
   $("#date").text(str);
 }
 
@@ -204,11 +217,11 @@ $("#info").mouseleave(function () {
   $("#info").hide();
 })
 
-function logout(){
+function logout() {
   $.post({
-    url:"user/logout",
-    success:function (data) {
-        window.location.href="/";
+    url: "user/logout",
+    success: function (data) {
+      window.location.href = "/";
     }
 
   })

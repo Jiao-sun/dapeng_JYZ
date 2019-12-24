@@ -15,24 +15,21 @@ public class WebConfig implements WebMvcConfigurer {
   @Autowired
   LoginInterceptor loginInterceptor;
 
-  final String[] notLoginInterceptPaths = {"/static/**", "/user/login", "/error/**", "js/", "/login"};
+  /**
+   * 不需要拦截的url
+   */
+  final String[] notLoginInterceptPaths = {"/favicon.ico","/user/login", "/login","/static/**","/webjars/**","/error/**"};
 
   //注册扩展拦截器
   public void addInterceptors(InterceptorRegistry registry) {
     registry.addInterceptor(loginInterceptor).addPathPatterns("/**")
         .excludePathPatterns(notLoginInterceptPaths);
-
   }
 
-
-  /***
-   * addResourceLocations指的是文件放置的目录，addResoureHandler指的是对外暴露的访问路径
-   */
+  @Override
   public void addResourceHandlers(ResourceHandlerRegistry registry) {
-    //排除静态资源拦截
-    registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
-    registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
-
+    registry.addResourceHandler("/static/**").addResourceLocations(new String[]{"classpath:/META-INF/resources/", "classpath:/resources/", "classpath:/static/", "classpath:/public/"});
+    registry.addResourceHandler(new String[]{"/webjars/**"}).addResourceLocations(new String[]{"classpath:/META-INF/resources/webjars/"});
   }
 
   /**
@@ -40,7 +37,6 @@ public class WebConfig implements WebMvcConfigurer {
    */
   public void addViewControllers(ViewControllerRegistry registry) {
     registry.addViewController("/login").setViewName("login");
-    registry.addViewController("/main").setViewName("index");
   }
 
   public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {

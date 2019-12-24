@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>修改个人资料</title>
+  <link type="text/css" href="/webjars/bootstrap"
+        th:href="@{/webjars/bootstrap/3.3.7/dist/css/bootstrap.css}" rel="stylesheet">
+  <style>
+    .input-group {
+      margin-top: 15px;
+    }
+
+    .info {
+      position: relative;
+      width: 400px;
+      position: relative;
+      left: 50%;
+      margin-left: -200px;
+    }
+
+    .input-group-addon {
+      width: 85px;
+    }
+
+    button {
+      position: relative;
+      margin: 15px 0;
+      margin-right: 115px;
+    }
+
+    input[type="radio"] {
+      margin-left: 20px;
+      vertical-align: top;
+      margin-right: 10px;
+    }
+
+    .errorMsg {
+      color: red;
+      font-size: 10px;
+      float: right;
+      right: 150px;
+      position: relative;
+    }
+  </style>
+</head>
+<script th:src="@{/webjars/jquery/3.4.1/dist/jquery.js}" rel="script">
+</script>
+<body><h2> 资料修改</h2>
+<div class="info">
+  <div class="baseInfo">
+    <h3>基本信息</h3>
+    <div class="input-prepend input-group">
+      <span class="add-on input-group-addon">用户编号:</span>
+      <input type="text" name="userNo" class="form-control" disabled
+             th:value="${session.user}==null?'登录错误':${session.user.userNo}">
+    </div>
+    <div class="input-prepend input-group">
+      <span class="add-on input-group-addon">用户名称:</span>
+      <input type="text" name="userNmae" class="form-control"
+             th:value="${session.user==null}?'':${session.user.userName}">
+    </div>
+    <div class="input-prepend input-group">
+      <span class="add-on input-group-addon">电话:</span>
+      <input type="tel" name="tel" class="form-control"
+             th:value="${session.user==null}?'':${session.user.tel}" MAXLENGTH="11">
+    </div>
+    <div class="input-prepend input-group">
+      <span class="add-on input-group-addon">性别:</span>
+      <div class="sexinput form-control">
+        <input type="radio" name="gender" value="男" th:checked="${session.user.gender== '男'} ">
+        <input type="radio" name="gender" value="女" th:checked="${session.user.gender== '女'} ">女
+      </div>
+    </div>
+  </div>
+  <div class="passWord">
+    <h3>修改密码</h3>
+    <div class="input-prepend input-group">
+      <span class="add-on input-group-addon">旧 密 码:</span>
+      <input type="password" name="oldPWD" class="form-control">
+
+    </div>
+    <span id="oldPWDError" class="errorMsg"></span>
+    <div class="input-prepend input-group">
+      <span class="add-on input-group-addon">新 密 码:</span>
+      <input type="password" name="newPWD" class="form-control">
+    </div>
+    <span id="newPWDError" class="errorMsg"></span>
+    <div class="input-prepend input-group">
+      <span class="add-on input-group-addon">重复新密码:</span>
+      <input type="password" name="rePWD" class="form-control">
+    </div>
+    <span id="rePWDError" class="errorMsg"></span>
+  </div>
+  <div>
+    <button type="button" class="btn-primary " onclick="javascript:window.location.href='/index'">
+      返回
+    </button>
+    <button type="button" class="btn-primary" onclick="updataInfo()">提交</button>
+  </div>
+</div>
+<script>
+  function validatePWD(userNo,PWD) {
+    $.get({
+      url:"/user/validat",
+      data:{userNo:userNo,passsword:PWD},
+      success:function (data) {
+         return data;
+      }
+    })
+  }
+
+  function updataInfo() {
+    var userNo= $(".baseInfo input[name=userNo]").val()
+    var gender = $(".baseInfo input[name=gender][checked=true]").val();
+    var userNmae = $(".baseInfo input[name=userNmae]").val();
+    var tel = $(".baseInfo input[name=tel]").val();
+    var oldPWD = $(".passWord input[name=oldPWD]").val();
+    var newPWD = $(".passWord input[name=newPWD]").val();
+    var rePWD = $(".passWord input[name=rePWD]").val();
+
+    $('#rePWDError').text("")
+    $('#oldPWDError').text("");
+    var data = {
+      userNo:userNo,
+      gender: gender,
+      userName: userNmae,
+      tel: tel
+    }
+    alert(gender + "   >" + userNmae)
+    if (newPWD.length > 0) {
+      if (oldPWD.length > 0) {
+        if(!validatePWD(userNo,oldPWD)){
+          $('#oldPWDError').text("旧密码错误！");
+        }
+        if (rePWD == newPWD) {
+          data.password = rePWD;
+        } else {
+          $('#rePWDError').text("两次密码不一致！")
+          return false;
+        }
+      } else {
+        $('#oldPWDError').text("请输入旧密码！");
+        return false;
+      }
+    }
+    $.ajax({
+      type: "PUT",
+      url: "/user/updat",
+      data: data,
+      success: function (data) {
+
+      }
+    })
+  }
+</script>
+</body>
+</html>
